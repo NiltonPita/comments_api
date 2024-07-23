@@ -1,0 +1,144 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Comments POC",
+        "description": "Documentação da API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "nilto.pita@yahoo.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000/v1",
+            "description": "api Local"
+        },
+        {
+            "url": "https://HostStage/v1",
+            "description": "api de Stage"
+        },
+        {
+            "url": "https://HostProd/v1",
+            "description": "api de producao"
+        }
+    ],
+    "paths": {
+        "/home/list/{comment_id}": {
+            "get": {
+                "summary": "Consulta de subcategoria",
+                "description": "Essa rota é responsavel por consultar subcategorias.",
+                "tags": [
+                    "Comments"
+                ],
+                "security": [
+                    {
+                    "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                    "name": "comment_id",
+                    "in": "path",
+                    "default": "1",
+                    "required": false,
+                    "description": "Filtrar subcategorias por categoria ou nome."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "OK",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                "$ref": "#/components/schemas/Comment"
+                                }
+                            }
+                        }
+                    }
+                    },
+                    "400": {
+                    "description": "Subcategoria não existe"
+                    }
+                }
+            }
+        },
+        "/home/create": {
+            "post": {
+                "summary": "Faz a inclusão do comentário",
+                "description": "Essa rota é responsavel por incluir comentário",
+                "tags": [
+                    "Comments"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Comment"
+                            },
+                            "examples": {
+                                "create": {
+                                    "value": {
+                                        "comment_id": 1,
+                                        "comment": "Um commentário",
+                                        "email": "email@gmail.com"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Comentário não existe"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Comment"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Comment": {
+                "type": "object",
+                "properties": {
+                    "comment_id": {
+                        "type": "number"
+                    },
+                    "comment": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
